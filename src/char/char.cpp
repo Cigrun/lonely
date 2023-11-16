@@ -1480,6 +1480,8 @@ int char_make_new_char( struct char_session_data* sd, char* name_, int str, int 
 	// check the number of already existing chars in this account
 	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT 1 FROM `%s` WHERE `account_id` = '%d'", schema_config.char_db, sd->account_id) )
 		Sql_ShowDebug(sql_handle);
+	if( sd->group_id != 5 && sd->group_id > 0 && sd->group_id < 99 && Sql_NumRows(sql_handle) >= 1 )
+		return -2; // character account limit exceeded
 #ifdef VIP_ENABLE
 	if( Sql_NumRows(sql_handle) >= MAX_CHARS )
 		return -2; // character account limit exceeded
@@ -1491,13 +1493,6 @@ int char_make_new_char( struct char_session_data* sd, char* name_, int str, int 
 	if ( slot != 0 && sd->group_id > 10 && sd->group_id < 99 )
 		return -2;
 
-	// limit gm account to 1 char
-	if( sd->group_id > 10 && sd->group_id < 99 ) {
-	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT 1 FROM `%s` WHERE `account_id` = '%d'", char_db, sd->account_id) )
-		Sql_ShowDebug(sql_handle);
-	if( Sql_NumRows(sql_handle) >= 1 )
-		return -2; // character account limit exceeded
-	}
 #endif
 
 	// check char slot
