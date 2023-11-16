@@ -18,7 +18,7 @@ prt_in,46,97,2	script	Iris#custom_stylist	408,{
 	mes "The fee for this service is 1 Rare Coin.";
 	next;
 	mes "[Iris]";
-	mes "The fee will be charged for the access of the service."
+	mes "The fee will be charged for the access of the service.";
 	mes "This means that you will be charged even if you do not change anything in the end.";
 	next;
 	mes "[Iris]";
