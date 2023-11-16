@@ -1486,6 +1486,18 @@ int char_make_new_char( struct char_session_data* sd, char* name_, int str, int 
 #else
 	if( Sql_NumRows(sql_handle) >= sd->char_slots )
 		return -2; // character account limit exceeded
+	
+	// limit gm account to first char slot
+	if ( slot != 0 && sd->group_id > 10 && sd->group_id < 99 )
+		return -2;
+
+	// limit gm account to 1 char
+	if( sd->group_id > 10 && sd->group_id < 99 ) {
+	if( SQL_ERROR == Sql_Query(sql_handle, "SELECT 1 FROM `%s` WHERE `account_id` = '%d'", char_db, sd->account_id) )
+		Sql_ShowDebug(sql_handle);
+	if( Sql_NumRows(sql_handle) >= 1 )
+		return -2; // character account limit exceeded
+	}
 #endif
 
 	// check char slot
